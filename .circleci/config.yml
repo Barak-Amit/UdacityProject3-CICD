@@ -3,8 +3,6 @@ version: 2.1
 defaults: &defaults
   docker:
     - image: circleci/node:13.8.0
-  steps:
-    - checkout
 
 commands:
   destroy-environment:
@@ -81,20 +79,6 @@ jobs:
           paths: [backend/node_modules]
           key: backend-build
   
-  test-frontend:
-    docker:
-      # Docker image here
-    steps:
-      # Checkout code from git
-      # Restore from cache
-      # Your job code here
-  test-backend:
-    docker:
-      # Docker image here
-    steps:
-      # Checkout code from git
-      # Restore from cache
-      # Your job code here
 
 
 workflows:
@@ -102,5 +86,3 @@ workflows:
     jobs:
       - build-frontend
       - build-backend
-      - test-frontend:
-          requires: [build-frontend]
