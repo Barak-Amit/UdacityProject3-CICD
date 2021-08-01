@@ -52,7 +52,7 @@ commands:
           command: |
             cd << parameters.module >>
             npm i
-            npm run << parameters.target >>
+      #      npm run << parameters.target >>
       - save_cache:
           paths: [<< parameter.module >>/node_modules]
           key: << parameter.module >>-build
