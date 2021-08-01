@@ -1,5 +1,11 @@
 version: 2.1
 
+defaults: &defaults
+  docker:
+    - image: circleci/node:13.8.0
+  steps:
+    - checkout
+
 commands:
   destroy-environment:
     description: Destroy back-end and front-end cloudformation stacks given a workflow ID.
@@ -31,24 +37,33 @@ commands:
             #  Add revert code here. You can find this in the Getting Started section.
               exit 1
             fi
-            
-jobs:
-  build-frontend:
-    docker:
-      - image: circleci/node:13.8.0
+
+  build-module:
+    description: Build the environment.
+    parameters:
+      module:
+        type: string
+        default: frontend
     steps:
       - checkout
       - restore_cache:
-          keys: [frontend-build]
+          keys: [<< parameters.module >>-build]
       - run:
-          name: Build front-end
           command: |
-            cd frontend
+            cd << parameters.module >>
             npm i
             npm run build
       - save_cache:
-          paths: [frontend/node_modules]
-          key: frontend-build
+          paths: [<< parameter.module >>/node_modules]
+          key: <<parameter.module >>-build
+
+jobs:
+  build-frontend:
+    <<: *defaults
+    steps:
+      - build-module:
+        module: frontend
+
   build-backend:
     docker:
       - image: circleci/node:13.8.0
@@ -65,10 +80,27 @@ jobs:
       - save_cache:
           paths: [backend/node_modules]
           key: backend-build
+  
+  test-frontend:
+    docker:
+      # Docker image here
+    steps:
+      # Checkout code from git
+      # Restore from cache
+      # Your job code here
+  test-backend:
+    docker:
+      # Docker image here
+    steps:
+      # Checkout code from git
+      # Restore from cache
+      # Your job code here
 
- 
+
 workflows:
   default:
     jobs:
       - build-frontend
       - build-backend
+      - test-frontend:
+          requires: [build-frontend]
