@@ -41,7 +41,7 @@ commands:
       module:
         type: string
         default: frontend
-      step:
+      target:
         type: string
         default: build
     steps:
