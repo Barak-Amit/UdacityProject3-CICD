@@ -52,7 +52,7 @@ commands:
           command: |
             cd << parameters.module >>
             npm i
-            npm run << parameters.target >>
+            npm << parameters.target >>
       - save_cache:
           paths: [<< parameters.module >>/node_modules]
           key: << parameters.module >>-build
@@ -63,28 +63,42 @@ jobs:
     steps:
       - build-target:
           module: "frontend"
-          target: "build"
+          target: "run build"
 
   build-backend:
     <<: *default
     steps:
       - build-target:
           module: "backend"
-          target: "build"
+          target: "run build"
 
   test-frontend:
     <<: *default
     steps:
       - build-target:
           module: "frontend"
-          target: "test"
+          target: "run test"
                 
   test-backend:
     <<: *default
     steps:
       - build-target:
           module: "backend"
-          target: "test"
+          target: "run test"
+
+  scan-frontend:
+    <<: *default
+    steps:
+      - build-target:
+          module: "frontend"
+          target: "audit --audit-level=critical"
+
+  scan-backend:
+    <<: *default
+    steps:
+      - build-target:
+          module: "backend"
+          target: "audit --audit-level=critical"
 
 
 workflows:
@@ -96,3 +110,7 @@ workflows:
           requires: [build-frontend]
       - test-backend:
           requires: [build-backend]
+      - scan-backend:
+          requires: [build-backend]
+      - scan-frontend:
+          requires: [build-frontend]
