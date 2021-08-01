@@ -35,7 +35,7 @@ commands:
               exit 1
             fi
 
-  run-step:
+  build-target:
     description: Build the environment.
     parameters:
       module:
@@ -52,7 +52,7 @@ commands:
           command: |
             cd << parameters.module >>
             npm i
-            npm run << parameters.step >>
+            npm run << parameters.target >>
       - save_cache:
           paths: [<< parameter.module >>/node_modules]
           key: << parameter.module >>-build
@@ -61,30 +61,30 @@ jobs:
   build-frontend:
     <<: *default
     steps:
-      - run-step:
+      - build-target:
           module: "frontend"
-          step: "build"
+          target: "build"
 
   build-backend:
     <<: *default
     steps:
-      - run-step:
+      - build-target:
           module: "backend"
-          step: "build"
+          target: "build"
 
   test-frontend:
     <<: *default
     steps:
-      - run-step:
+      - build-target:
           module: "frontend"
-          step: "test"
+          target: "test"
                 
   test-backend:
     <<: *default
     steps:
-      - run-step:
+      - build-target:
           module: "backend"
-          step: "test"
+          target: "test"
 
 
 workflows:
