@@ -41,9 +41,9 @@ commands:
       module:
         type: string
         default: "frontend"
-      target:
-        type: string
-        default: "build"
+  #    target:
+  #      type: string
+  #      default: "build"
     steps:
       - checkout
       - restore_cache:
