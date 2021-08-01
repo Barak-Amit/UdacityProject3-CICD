@@ -59,7 +59,7 @@ jobs:
     <<: *default
     steps:
       - build-module:
-          module: frontend
+          module: "frontend"
 
   build-backend:
     docker:
