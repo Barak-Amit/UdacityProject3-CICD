@@ -1,6 +1,6 @@
 version: 2.1
 
-defaults: &defaults
+defaults: &default
   docker:
     - image: circleci/node:13.8.0
 
@@ -57,10 +57,10 @@ commands:
 
 jobs:
   build-frontend:
-    <<: *defaults
+    <<: *default
     steps:
       - build-module:
-        module: frontend
+          module: frontend
 
   build-backend:
     docker:
