@@ -40,10 +40,10 @@ commands:
     parameters:
       module:
         type: string
-        default: frontend
+        default: "frontend"
       target:
         type: string
-        default: build
+        default: "build"
     steps:
       - checkout
       - restore_cache:
