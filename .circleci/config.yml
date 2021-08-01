@@ -43,16 +43,16 @@ commands:
         default: frontend
     steps:
       - checkout
-      - restore_cache:
-          keys: [<< parameters.module >>-build]
+      #- restore_cache:
+      #    keys: [<< parameters.module >>-build]
       - run:
           command: |
             cd << parameters.module >>
             npm i
             npm run build
-      - save_cache:
-          paths: [<< parameter.module >>/node_modules]
-          key: <<parameter.module >>-build
+      #- save_cache:
+      #    paths: [<< parameter.module >>/node_modules]
+      #    key: <<parameter.module >>-build
 
 jobs:
   build-frontend:
