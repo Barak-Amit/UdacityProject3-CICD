@@ -41,9 +41,9 @@ commands:
       module:
         type: string
         default: "frontend"
-  #    target:
-  #      type: string
-  #      default: "build"
+      target:
+        type: string
+        default: "build"
     steps:
       - checkout
       - restore_cache:
@@ -52,10 +52,10 @@ commands:
           command: |
             cd << parameters.module >>
             npm i
-      #      npm run << parameters.target >>
+            npm run << parameters.target >>
       - save_cache:
-          paths: [<< parameter.module >>/node_modules]
-          key: << parameter.module >>-build
+          paths: [<< parameters.module >>/node_modules]
+          key: << parameters.module >>-build
 
 jobs:
   build-frontend:
@@ -63,28 +63,28 @@ jobs:
     steps:
       - build-target:
           module: "frontend"
-          #target: "build"
+          target: "build"
 
   build-backend:
     <<: *default
     steps:
       - build-target:
           module: "backend"
-          #target: "build"
+          target: "build"
 
   test-frontend:
     <<: *default
     steps:
       - build-target:
           module: "frontend"
-          #target: "test"
+          target: "test"
                 
   test-backend:
     <<: *default
     steps:
       - build-target:
           module: "backend"
-          #target: "test"
+          target: "test"
 
 
 workflows:
