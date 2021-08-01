@@ -43,8 +43,8 @@ commands:
         default: frontend
     steps:
       - checkout
-      #- restore_cache:
-      #    keys: [<< parameters.module >>-build]
+      - restore_cache:
+          keys: [<< parameters.module >>-build]
       - run:
           command: |
             cd << parameters.module >>
@@ -62,21 +62,10 @@ jobs:
           module: "frontend"
 
   build-backend:
-    docker:
-      - image: circleci/node:13.8.0
+    <<: *default
     steps:
-      - checkout
-      - restore_cache:
-          keys: [backend-build]
-      - run:
-          name: Back-end build
-          command: |
-            cd backend
-            npm i
-            npm run build
-      - save_cache:
-          paths: [backend/node_modules]
-          key: backend-build
+      - build-module:
+          module: "backend"
   
 
 
