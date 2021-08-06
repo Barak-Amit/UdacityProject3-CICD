@@ -1,6 +1,4 @@
 version: 2.1
-orbs:
-  slack: circleci/circleci-build
 
 defaults: &default
   docker:
