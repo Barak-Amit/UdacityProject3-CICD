@@ -125,8 +125,7 @@ jobs:
               --template-file .circleci/files/backend.yml \
               --tags project=AB_UDACITY_PROJECT3_BACKEND \
               --stack-name "backend-udapeople-ab1j287dhjppmz437" \
-              --parameter-overrides ID="ab1j287dhjppmz437"  
-              exit 1
+              --parameter-overrides ID="ab1j287dhjppmz437"
       - run:
           name: Ensure front-end infrastructure exist
           command: |
@@ -134,8 +133,7 @@ jobs:
               --template-file .circleci/files/frontend.yml \
               --tags project=your-tag \
               --stack-name "frontend-udapeople-ab1j287dhjppmz437" \
-              --parameter-overrides ID="ab1j287dhjppmz437"  
-              exit 1
+              --parameter-overrides ID="ab1j287dhjppmz437"
       - run:
           name: Add back-end ip to ansible inventory
           command: |
