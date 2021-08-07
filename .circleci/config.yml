@@ -117,7 +117,7 @@ jobs:
 
   deploy-infrastructure:
     docker:
-      - image: amazon/aws-cli
+      - image: circleci/node:13.8.0
     steps:
       - checkout
       - run:
@@ -147,8 +147,9 @@ jobs:
           root: ~/
           paths:
             - project/.circleci/ansible/inventory.txt
-      - destroy_environment
-        when: on_fail
+      - destroy_environment:
+          stackname: ab1j287dhjppmz437
+          when: on_fail
 
 workflows:
   default:
