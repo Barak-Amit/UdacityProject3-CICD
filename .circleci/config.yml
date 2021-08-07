@@ -21,7 +21,6 @@ commands:
           command: |
             aws cloudformation delete-stack --stack-name backend-<< prameters.stackname >>
             aws cloudformation delete-stack --stack-name frontend-<< prameters.stackname >>
-          when: on_fail
 
   revert-migrations:
     description: Revert the last migration if successfully run in the current workflow.
