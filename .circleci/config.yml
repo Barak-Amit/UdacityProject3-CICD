@@ -149,7 +149,7 @@ jobs:
             - project/.circleci/ansible/inventory.txt
       - destroy-environment:
           stackname: ab1j287dhjppmz437
-          when: on_fail
+        when: on_fail
 
 workflows:
   default:
