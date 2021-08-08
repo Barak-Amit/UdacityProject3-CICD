@@ -134,7 +134,7 @@ jobs:
           command: |
             aws cloudformation deploy \
               --template-file .circleci/files/frontend.yml \
-              --tags project=your-tag \
+              --tags project=AB_UDACITY_PROJECT3_FRONTEND \
               --stack-name "frontend-udapeople-ab1j287dhjppmz437" \
               --parameter-overrides ID="ab1j287dhjppmz437"
       - run:
@@ -142,7 +142,7 @@ jobs:
           command: |
             aws ec2 describe-instances \
               --query 'Reservations[*].Instances[*].PublicIpAddress' \
-              --filters "Name=tag:Project,Values=AB_UDACITY_PROJECT3_BACKEND" \
+              --filters "Name=tag:project,Values=AB_UDACITY_PROJECT3_BACKEND" \
               --output text >> inventory.txt
       - persist_to_workspace:
           root: ~/
