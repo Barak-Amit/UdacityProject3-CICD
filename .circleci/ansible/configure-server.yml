@@ -20,4 +20,4 @@
 
   roles:
     - configure-prometheus-node-exporter
-    - configure-server
+    - configure-server1
