@@ -151,6 +151,27 @@ jobs:
       - destroy-environment:
           stackname: udapeople-ab1j287dhjppmz437
 
+  configure-infrastructure:
+    docker:
+      - image: python:3.7-alpine3.11
+    steps:
+      - checkout
+      - add_ssh_keys:
+          fingerprints: ["7b:f6:63:89:5a:98:02:a6:4d:aa:f9:30:a5:da:64:36"] 
+      - attach_workspace:
+          at: ~/
+      - run:
+          name: Install dependencies
+          command: |
+            
+            exit 1
+      - run:
+          name: Configure server
+          command: |
+            # Your code here
+            exit 1
+      # Here's where you will add some code to rollback on failure      
+
 workflows:
   default:
     jobs:
