@@ -192,7 +192,9 @@ jobs:
           command: |
             cd backend
             npm i
-            npm run migrations
+            npm run migrations > migration_status.txt
+            cat migration_status.txt
+            echo "*************"
       - run:
           name: Send migration results to memstash
           command: |
