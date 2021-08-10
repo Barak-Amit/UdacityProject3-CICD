@@ -202,6 +202,10 @@ jobs:
           name: Send migration results to memstash
           command: |
             exit 1
+      - run:
+          when: on_fail
+          command: |
+            npm run migrations:revert
       - destroy-environment:
           stackname: udapeople-ab1j287dhjppmz437    
  
