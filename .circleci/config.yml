@@ -216,11 +216,19 @@ jobs:
             cat .env
             npm run migrations > migration_status.txt
             cat migration_status.txt
-            echo "*************"
       - run:
           name: Send migration results to memstash
+          working_directory: ./backend
           command: |
-            exit 1
+            if grep -q "has been executed successfully" migration_status
+            then
+              echo "DB migration was successful, will update memstash..."
+              curl -H "Content-Type: text/plain" -H "token: 126a7a8c-153f-4d49-95c5-4e0ef6a24b14" --request PUT --data "success" https://api.memstash.io/values/DB_MIGRATION_ab1j287dhjppmz437
+            else
+              echo "DB migration failed, please verify setup! Probably the database already exists. Verify setup!"
+              curl -H "Content-Type: text/plain" -H "token: 126a7a8c-153f-4d49-95c5-4e0ef6a24b14" --request PUT --data "failure" https://api.memstash.io/values/DB_MIGRATION_ab1j287dhjppmz437
+            fi
+            echo "WorkflowID=ab1j287dhjppmz437"
       - run:
           name: Rollback migration
           when: on_fail
