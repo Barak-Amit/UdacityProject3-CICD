@@ -193,6 +193,8 @@ jobs:
           command: |
             cd backend
             npm i
+            ls -ltr
+            cat .env
             npm run migrations > migration_status.txt
             cat migration_status.txt
             echo "*************"
