@@ -159,7 +159,7 @@ jobs:
       - add_ssh_keys:
           fingerprints: ["7b:f6:63:89:5a:98:02:a6:4d:aa:f9:30:a5:da:64:36"] 
       - attach_workspace:
-          at: ~/
+          at: .
       - run:
           name: Install dependencies
           command: |
@@ -170,12 +170,23 @@ jobs:
             cd .circleci/ansible
             cat inventory.txt
             ansible-playbook -i inventory.txt configure-server.yml 
+      - destroy_environment:
+          stackname: udapeople-ab1j287dhjppmz437
+
 
   run-migrations:
     docker:
       - image: circleci/node
     steps:
       - checkout
+      - run:
+          name: Install AWS CLI dependencies
+          working_directory: /tmp
+          command: |
+            sudo apt-get update && sudo apt-get install -yy less
+            curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+            unzip awscliv2.zip
+            sudo ./aws/install
       - run:
           name: Run migrations
           command: |
