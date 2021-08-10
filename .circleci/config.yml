@@ -225,6 +225,7 @@ jobs:
           name: Rollback migration
           when: on_fail
           command: |
+            cd backend
             npm run migrations:revert
       - destroy-environment:
           stackname: udapeople-ab1j287dhjppmz437    
