@@ -376,9 +376,9 @@ jobs:
 workflows:
   default:
     jobs:
+      -install-frontend-dependencies
       -install-backend-dependencies
-      -install-backend-dependencies
-      - build-frontend
+      - build-frontend:
           requires: [install-frontend-dependencies]
       - build-backend:
           context: ABProject3
