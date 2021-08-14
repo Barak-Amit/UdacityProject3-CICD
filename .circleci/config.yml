@@ -368,8 +368,11 @@ jobs:
           working_directory: ./backend
           command: |
             URL="http://udapeople-ab1j287dhjppmz437.s3-website-us-west-2.amazonaws.com/index.html"
-            curl -s ${URL} | grep -q "Welcome"
-            exit 1
+            if curl -s ${URL} | grep -q "Welcome"
+            then
+              return 1
+            else 
+              return 1
       - destroy-environment:
           stackname: udapeople-ab1j287dhjppmz437
       - revert_migrations:
