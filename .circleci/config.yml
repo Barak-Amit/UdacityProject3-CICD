@@ -250,7 +250,8 @@ jobs:
           stackname: udapeople-ab1j287dhjppmz437    
  
   deploy-frontend:
-    - image: circleci/node
+    docker:
+      - image: circleci/node
     steps:
       - checkout
       - attach_workspace:
@@ -290,7 +291,8 @@ jobs:
             npm run migrations:revert
 
   deploy-backend:
-    - image: python:3.9.0-alpine
+    docker:
+      - image: python:3.9.0-alpine
     steps:
       - checkout
       - add_ssh_keys:
