@@ -404,8 +404,10 @@ jobs:
           name: Update cloudfront distribution
           working_directory: ./.circleci/files
           command: |
+            pwd
+            ls -ltr
             aws cloudformation deploy \
-              --template-file cloudfront.yaml \
+              --template-file cloudfront.yml \
               --stack-name udapeople-cloudfront-production \
               --parameter-overrides WorkflowID="ab1j287dhjppmz437" \
               --tags project=udapeople
