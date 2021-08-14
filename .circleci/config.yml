@@ -346,7 +346,6 @@ jobs:
             exit 1
       - destroy-environment:
           stackname: udapeople-ab1j287dhjppmz437
-          when: on_fail
       - revert_migrations:
           id: ab1j287dhjppmz437
           when: on_fail
