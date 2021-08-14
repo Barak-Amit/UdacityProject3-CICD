@@ -156,6 +156,7 @@ jobs:
               --query 'Reservations[*].Instances[*].PublicIpAddress' \
               --filters "Name=tag:project,Values=AB_UDACITY_PROJECT3_BACKEND" \
               --output text >> .circleci/ansible/inventory.txt
+            cat .circleci/ansible/inventory.txt
       - persist_to_workspace:
           root: ~/
           paths:
@@ -278,7 +279,7 @@ jobs:
           command: |
             aws s3 cp ./dist "s3://udapeople-ab1j287dhjppmz437" --recursive
       - persist_to_workspace:
-          root: .
+          root: ~/
           paths:
             - frontend/dist
       - destroy-environment:
