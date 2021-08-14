@@ -280,7 +280,7 @@ jobs:
           root: .
           paths:
             - frontend/dist
-      - destroy_environment:
+      - destroy-environment:
           id: udapeople-ab1j287dhjppmz437
           when: on_fail
       - run:
@@ -313,7 +313,7 @@ jobs:
           command: |
             cat inventory
             ansible-playbook -i inventory deploy-server.yaml -vv
-      - destroy_environment:
+      - destroy-environment:
           id: udapeople-ab1j287dhjppmz437
           when: on_fail
       - run:
