@@ -22,24 +22,27 @@ commands:
             aws cloudformation delete-stack --stack-name backend-<< parameters.stackname >>
             aws cloudformation delete-stack --stack-name frontend-<< parameters.stackname >>
 
-  revert-migrations:
+  revert_migrations:
     description: Revert the last migration if successfully run in the current workflow.
     parameters:
-      # Add parameter here     
+      when:
+        type: string
+      id:
+        type: string
     steps:
       - run:
           name: Revert migrations
-          # Add when this will run
+          working_directory: ./backend
           command: |
-            # Curl command here to see if there was a successful migration associated with the workflow id, store result in SUCCESS variable
-            SUCCESS = 1
-            if(( $SUCCESS==1 )); 
+            SUCCESS=$(curl -H "token: 126a7a8c-153f-4d49-95c5-4e0ef6a24b14" --request GET https://api.memstash.io/values/DB_MIGRATION_<< parameters.id >>)
+            echo $SUCCESS
+            if [[ "$SUCCESS" == "success" ]]
             then
-            #  cd ~/project/backend
-            #  npm install
-            #  Add revert code here. You can find this in the Getting Started section.
-              exit 1
+              pwd
+              ls -la
+              npm run migrations:revert
             fi
+          when: << parameters.when >>
 
   build-target:
     description: Build the environment.
@@ -240,12 +243,9 @@ jobs:
               curl -H "Content-Type: text/plain" -H "token: 126a7a8c-153f-4d49-95c5-4e0ef6a24b14" --request PUT --data "failure" https://api.memstash.io/values/DB_MIGRATION_ab1j287dhjppmz437
             fi
             echo "WorkflowID=ab1j287dhjppmz437"
-      - run:
-          name: Rollback migration
+      - revert_migrations:
+          id: ab1j287dhjppmz437
           when: on_fail
-          command: |
-            cd backend
-            npm run migrations:revert
       - destroy-environment:
           stackname: udapeople-ab1j287dhjppmz437    
  
@@ -283,12 +283,10 @@ jobs:
             - frontend/dist
       - destroy-environment:
           stackname: udapeople-ab1j287dhjppmz437
-      - run:
-          name: Rollback migration
+      - revert_migrations:
+          id: ab1j287dhjppmz437
           when: on_fail
-          command: |
-            cd backend
-            npm run migrations:revert
+
 
   deploy-backend:
     docker:
@@ -311,16 +309,14 @@ jobs:
           name: Deploy backend
           working_directory: ./.circleci/ansible
           command: |
-            cat inventory
+            cat inventory.txt
             ansible-playbook -i inventory.txt deploy-backend.yaml -vv
       - destroy-environment:
           stackname: udapeople-ab1j287dhjppmz437
-      - run:
-          name: Rollback migration
+      - revert_migrations:
+          id: ab1j287dhjppmz437
           when: on_fail
-          command: |
-            cd backend
-            npm run migrations:revert
+
 
 workflows:
   default:
