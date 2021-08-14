@@ -370,9 +370,10 @@ jobs:
             URL="http://udapeople-ab1j287dhjppmz437.s3-website-us-west-2.amazonaws.com/index.html"
             if curl -s ${URL} | grep -q "Welcome"
             then
-              return 1
+              return 0
             else 
               return 1
+            fi
       - destroy-environment:
           stackname: udapeople-ab1j287dhjppmz437
       - revert_migrations:
