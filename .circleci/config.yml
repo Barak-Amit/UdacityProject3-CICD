@@ -19,6 +19,7 @@ commands:
           name: Destroy environments
           when: on_fail
           command: |
+            aws s3 rm s3://<< parameters.stackname >> --recursive
             aws cloudformation delete-stack --stack-name backend-<< parameters.stackname >>
             aws cloudformation delete-stack --stack-name frontend-<< parameters.stackname >>
 
