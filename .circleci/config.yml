@@ -128,7 +128,7 @@ jobs:
               --tags project=AB_UDACITY_PROJECT3_BACKEND \
               --stack-name "backend-udapeople-ab1j287dhjppmz437" \
               --parameter-overrides ID="ab1j287dhjppmz437"
-    - run:
+      - run:
           name: Save backend URL in memstash
           command: |
             BACKEND_IP=$(aws ec2 describe-instances \
