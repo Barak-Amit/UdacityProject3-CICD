@@ -383,7 +383,7 @@ workflows:
             - install-frontend-dependencies
       - build-backend:
           requires:
-            -install-backend-dependencies
+            - install-backend-dependencies
           context: ABProject3
       - test-frontend:
           requires: [build-frontend]
