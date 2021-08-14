@@ -128,6 +128,16 @@ jobs:
               --tags project=AB_UDACITY_PROJECT3_BACKEND \
               --stack-name "backend-udapeople-ab1j287dhjppmz437" \
               --parameter-overrides ID="ab1j287dhjppmz437"
+    - run:
+          name: Save backend URL in memstash
+          command: |
+            BACKEND_IP=$(aws ec2 describe-instances \
+              --query 'Reservations[*].Instances[*].PublicIpAddress' \
+              --filters "Name=tag:project,Values=AB_UDACITY_PROJECT3_BACKEND" \
+              --output text)
+
+            curl -H "Content-Type: text/plain" -H "token: 126a7a8c-153f-4d49-95c5-4e0ef6a24b14" --request PUT --data "http://$BACKEND_IP:3030" https://api.memstash.io/values/BACKEND_URL
+
       - run:
           name: Ensure front-end infrastructure exist
           command: |
@@ -239,6 +249,77 @@ jobs:
       - destroy-environment:
           stackname: udapeople-ab1j287dhjppmz437    
  
+  deploy-frontend:
+    - image: circleci/node
+    steps:
+      - checkout
+      - attach_workspace:
+          at: .
+      - run:
+          name: Install AWS CLI dependencies
+          working_directory: /tmp
+          command: |
+            sudo apt-get update && sudo apt-get install -yy less
+            curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+            unzip awscliv2.zip
+            sudo ./aws/install
+      - run:
+          name: Rebuild frontend with backend API Url
+          working_directory: ./frontend
+          command: |
+            export API_URL=$(curl -H "token: 126a7a8c-153f-4d49-95c5-4e0ef6a24b14" --request GET https://api.memstash.io/values/BACKEND_URL)
+            echo "${API_URL}"
+            npm run build
+      - run:
+          name: Deploy frontend objects to S3
+          working_directory: ./frontend
+          command: |
+            aws s3 cp ./dist "s3://udapeople-ab1j287dhjppmz437" --recursive
+      - persist_to_workspace:
+          root: .
+          paths:
+            - frontend/dist
+      - destroy_environment:
+          id: udapeople-ab1j287dhjppmz437
+          when: on_fail
+      - run:
+          name: Rollback migration
+          when: on_fail
+          command: |
+            cd backend
+            npm run migrations:revert
+
+  deploy-backend:
+    - image: python:3.9.0-alpine
+    steps:
+      - checkout
+      - add_ssh_keys:
+          fingerprints: ["7b:f6:63:89:5a:98:02:a6:4d:aa:f9:30:a5:da:64:36"]
+      - attach_workspace:
+          at: .
+      - run:
+          name: Install dependencies
+          working_directory: /tmp
+          command: |
+            apk add --update ansible curl rsync openssh nodejs npm
+            ansible --version
+            pip install awscli
+            aws --version
+      - run:
+          name: Deploy backend
+          working_directory: ./.circleci/ansible
+          command: |
+            cat inventory
+            ansible-playbook -i inventory deploy-server.yaml -vv
+      - destroy_environment:
+          id: udapeople-ab1j287dhjppmz437
+          when: on_fail
+      - run:
+          name: Rollback migration
+          when: on_fail
+          command: |
+            cd backend
+            npm run migrations:revert
 
 workflows:
   default:
@@ -264,4 +345,7 @@ workflows:
           requires: [deploy-infrastructure]
       - run-migrations:
           requires: [configure-infrastructure]
-
+      - deploy-frontend:
+          requires: [run-migrations]
+      - deploy-backend:
+          requires: [run-migrations]
