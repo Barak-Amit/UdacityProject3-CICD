@@ -180,7 +180,6 @@ jobs:
       - run:
           name: Configure server
           command: |
-            ls -ltr
             cd .circleci/ansible
             cat inventory.txt
             ansible-playbook -i inventory.txt configure-server.yml 
@@ -257,7 +256,7 @@ jobs:
     steps:
       - checkout
       - attach_workspace:
-          at: .
+          at: ~/
       - run:
           name: Install AWS CLI dependencies
           working_directory: /tmp
@@ -298,7 +297,7 @@ jobs:
       - add_ssh_keys:
           fingerprints: ["7b:f6:63:89:5a:98:02:a6:4d:aa:f9:30:a5:da:64:36"]
       - attach_workspace:
-          at: .
+          at: ~/
       - run:
           name: Install dependencies
           working_directory: /tmp
@@ -312,7 +311,7 @@ jobs:
           working_directory: ./.circleci/ansible
           command: |
             cat inventory.txt
-            ansible-playbook -i inventory.txt deploy-backend.yaml -vv
+            ansible-playbook -i inventory.txt deploy-backend.yml -vv
       - destroy-environment:
           stackname: udapeople-ab1j287dhjppmz437
       - revert_migrations:
