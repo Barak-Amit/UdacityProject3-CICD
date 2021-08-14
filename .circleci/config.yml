@@ -312,7 +312,7 @@ jobs:
           working_directory: ./.circleci/ansible
           command: |
             cat inventory
-            ansible-playbook -i inventory deploy-backend.yaml -vv
+            ansible-playbook -i inventory.txt deploy-backend.yaml -vv
       - destroy-environment:
           stackname: udapeople-ab1j287dhjppmz437
       - run:
