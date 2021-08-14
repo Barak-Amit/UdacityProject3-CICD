@@ -381,8 +381,8 @@ workflows:
       - build-frontend:
           requires: [install-frontend-dependencies]
       - build-backend:
-          context: ABProject3
           requires: [install-backend-dependencies]
+          context: ABProject3
       - test-frontend:
           requires: [build-frontend]
       - test-backend:
