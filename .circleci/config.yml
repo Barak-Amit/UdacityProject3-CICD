@@ -172,7 +172,7 @@ jobs:
       - add_ssh_keys:
           fingerprints: ["7b:f6:63:89:5a:98:02:a6:4d:aa:f9:30:a5:da:64:36"] 
       - attach_workspace:
-          at: .
+          at: ~/
       - run:
           name: Install dependencies
           command: |
@@ -180,6 +180,7 @@ jobs:
       - run:
           name: Configure server
           command: |
+            ls -ltr
             cd .circleci/ansible
             cat inventory.txt
             ansible-playbook -i inventory.txt configure-server.yml 
@@ -193,7 +194,7 @@ jobs:
     steps:
       - checkout
       - attach_workspace:
-          at: .
+          at: ~/
       - run:
           name: Install AWS CLI dependencies
           working_directory: /tmp
