@@ -278,10 +278,17 @@ jobs:
           working_directory: ./frontend
           command: |
             aws s3 cp ./dist "s3://udapeople-ab1j287dhjppmz437" --recursive
+      - run:
+          name: check location
+          command: |
+            ls -ltr
+            pwd
+            cd frontend
+            ls -ltr
       - persist_to_workspace:
           root: ~/
           paths:
-            - project/.circleci/frontend/dist
+            - ./frontend/dist
       - destroy-environment:
           stackname: udapeople-ab1j287dhjppmz437
       - revert_migrations:
