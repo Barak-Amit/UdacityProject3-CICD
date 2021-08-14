@@ -268,6 +268,7 @@ jobs:
           name: Rebuild frontend with backend API Url
           working_directory: ./frontend
           command: |
+            npm i
             export API_URL=$(curl -H "token: 126a7a8c-153f-4d49-95c5-4e0ef6a24b14" --request GET https://api.memstash.io/values/BACKEND_URL)
             echo "${API_URL}"
             npm run build
