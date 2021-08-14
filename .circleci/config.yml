@@ -281,12 +281,7 @@ jobs:
       - persist_to_workspace:
           root: ~/
           paths:
-            - frontend/dist
-      - persist_to_workspace:
-          root: ~/
-          paths:
             - project/frontend/dist
-          when: on_fail
       - destroy-environment:
           stackname: udapeople-ab1j287dhjppmz437
       - revert_migrations:
