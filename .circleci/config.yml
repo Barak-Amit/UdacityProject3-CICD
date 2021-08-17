@@ -251,7 +251,6 @@ jobs:
             cd backend
             npm i
             cat .env
-            npm run migrations:create
             npm rum migrations:generate
             npm run migrations > migration_status.txt
             cat migration_status.txt
