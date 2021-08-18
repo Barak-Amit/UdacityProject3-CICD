@@ -429,8 +429,8 @@ jobs:
               then
                 echo "$OldID!=$NewWorkflowID => will delete old version"
                 aws s3 rm "s3://udapeople-${OldID}" --recursive
-                aws cloudformation delete-stack --stack-name "udapeople-frontend-${OldID}"
-                aws cloudformation delete-stack --stack-name "udapeople-backend-${OldID}"
+                aws cloudformation delete-stack --stack-name "frontend-udapeople-${OldID}"
+                aws cloudformation delete-stack --stack-name "backend-udapeople-${OldID}"
               else
                 echo "No old ID present."
               fi
