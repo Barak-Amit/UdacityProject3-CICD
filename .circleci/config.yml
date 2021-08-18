@@ -424,7 +424,7 @@ jobs:
             NewWorkflowID=${CIRCLE_WORKFLOW_ID:0:7}
             if [[ "$NewWorkflowID" != "$OldID" ]]
             then
-              if [-z "$OldID"]
+              if [ -z "$OldID" ]
               then
                 echo "$OldID!=$NewWorkflowID => will delete old version"
                 aws s3 rm "s3://udapeople-${OldID}" --recursive
