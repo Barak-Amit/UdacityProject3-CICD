@@ -420,8 +420,14 @@ jobs:
           name: Clean up old environment
           command: |
             OldID=$(curl -H "token: b95f8dc3-9ee8-4285-b889-af9c1b5e8329" --request GET https://api.memstash.io/values/WorkflowID)
-            echo Old ID = #OldID
-            NewWorkflowID=${CIRCLE_WORKFLOW_ID:0:7}
+            
+            NewWorkflowID=WorkflowID=$(aws cloudformation \
+                  list-exports --query "Exports[?Name=='WorkflowID'].Value" \
+                  --no-paginate --output text)
+            
+            echo Old ID = $OldID
+            echo new ID = $NewWorkflowID
+            
             if [[ "$NewWorkflowID" != "$OldID" ]]
             then
               if [["$OldID"!=""]]
