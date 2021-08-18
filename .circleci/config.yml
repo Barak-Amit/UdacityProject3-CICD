@@ -420,6 +420,7 @@ jobs:
           name: Clean up old environment
           command: |
             OldID=$(curl -H "token: b95f8dc3-9ee8-4285-b889-af9c1b5e8329" --request GET https://api.memstash.io/values/WorkflowID)
+            echo Old ID = #OldID
             WorkflowID=${CIRCLE_WORKFLOW_ID:0:7}
             if [[ "$WorkflowID" != "$OldID" ]]
             then
