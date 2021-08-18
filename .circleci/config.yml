@@ -421,12 +421,12 @@ jobs:
           command: |
             OldID=$(curl -H "token: b95f8dc3-9ee8-4285-b889-af9c1b5e8329" --request GET https://api.memstash.io/values/WorkflowID)
             echo Old ID = #OldID
-            WorkflowID=${CIRCLE_WORKFLOW_ID:0:7}
-            if [[ "$WorkflowID" != "$OldID" ]]
+            NewWorkflowID=${CIRCLE_WORKFLOW_ID:0:7}
+            if [[ "$NewWorkflowID" != "$OldID" ]]
             then
               if [["$OldID"!=""]]
               then
-                echo "$OldID!=$WorkflowID => will delete old version"
+                echo "$OldID!=$NewWorkflowID => will delete old version"
                 aws s3 rm "s3://udapeople-${OldID}" --recursive
                 aws cloudformation delete-stack --stack-name "udapeople-frontend-${OldID}"
                 aws cloudformation delete-stack --stack-name "udapeople-backend-${OldID}"
@@ -434,7 +434,7 @@ jobs:
                 echo "No old ID present."
               fi
             else
-              echo "$OldID==$WorkflowID => nothing needs to be done..."
+              echo "$OldID==$NewWorkflowID => nothing needs to be done..."
             fi
           environment:
             TERM: xterm-256color
