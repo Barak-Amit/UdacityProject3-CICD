@@ -61,7 +61,7 @@ commands:
       - run:
           command: |
             cd << parameters.module >>
-            npm i
+            # npm i
             npm << parameters.target >>
       - save_cache:
           paths: [<< parameters.module >>/node_modules]
