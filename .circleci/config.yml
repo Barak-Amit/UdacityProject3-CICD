@@ -448,15 +448,15 @@ jobs:
 workflows:
   default:
     jobs:
-      #- install-frontend-dependencies
-      #- install-backend-dependencies
-      #- build-frontend:
-      #    requires: 
-      #      - install-frontend-dependencies
-      #- build-backend:
-      #    requires:
-      #      - install-backend-dependencies
-      #    context: ABProject3
+      - install-frontend-dependencies
+      - install-backend-dependencies
+      - build-frontend:
+          requires: 
+            - install-frontend-dependencies
+      - build-backend:
+          requires:
+            - install-backend-dependencies
+          context: ABProject3
       #- test-frontend:
       #    requires: [build-frontend]
       #- test-backend:
@@ -467,6 +467,7 @@ workflows:
       #    requires: [build-frontend]
       - deploy-infrastructure:
       #    requires: [test-frontend, test-backend, scan-frontend, scan-backend]
+          requires: [build-frontend, build-backend]
           filters:
             branches:
               only: main
