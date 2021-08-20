@@ -233,7 +233,7 @@ jobs:
           command: |
             touch ~/project/backend/.env
 
-            echo ENVIRONMENT=production >> "backend/.env"
+            echo ENVIRONMENT=development >> "backend/.env"
             echo TYPEORM_CONNECTION=postgres >> "backend/.env"
             echo TYPEORM_MIGRATIONS_DIR=./src/migrations >> "backend/.env"
             echo TYPEORM_ENTITIES=./src/modules/domain/**/*.entity.ts >> "backend/.env"
@@ -244,6 +244,13 @@ jobs:
             echo TYPEORM_PASSWORD=$TYPEORM_PASSWORD >> "backend/.env"
             echo TYPEORM_DATABASE=$TYPEORM_DATABASE >> "backend/.env"
             echo NODE_ENV=production >> "backend/.env"
+
+          cat ~/project/bacakend/.env
+          echo $TYPEORM_HOST
+          echo $TYPEORM_PORT
+          echo $TYPEORM_USERNAME
+          echo $TYPEORM_PASSWORD
+          echo $TYPEORM_DATABASE
 
       - run:
           name: Run migrations
