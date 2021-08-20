@@ -247,14 +247,6 @@ jobs:
             echo TYPEORM_DATABASE=$TYPEORM_DATABASE >> ".env"
             echo NODE_ENV=production >> ".env"
 
-            pwd
-            cat .env
-            echo "$TYPEORM_HOST"
-            echo "$TYPEORM_PORT"
-            echo "$TYPEORM_USERNAME"
-            echo "$TYPEORM_PASSWORD"
-            echo "$TYPEORM_DATABASE"
-
       - run:
           name: Run migrations
           command: |
