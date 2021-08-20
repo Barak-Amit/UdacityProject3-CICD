@@ -148,38 +148,38 @@ jobs:
     steps:
       - checkout
       - run: yum -y install tar gzip
-      #- run:
-      #    name: Ensure back-end infrastructure exists
-      #    command: |
-      #      aws cloudformation deploy \
-      #        --template-file .circleci/files/backend.yml \
-      #        --tags project=AB_UDACITY_PROJECT3_BACKEND \
-      #        --stack-name "backend-udapeople-${CIRCLE_WORKFLOW_ID:0:7}" \
-      #        --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"
-      #- run:
-      #    name: Save backend URL in memstash
-      #    command: |
-      #      BACKEND_IP=$(aws ec2 describe-instances \
-      #        --query 'Reservations[*].Instances[*].PublicIpAddress' \
-      #        --filters "Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID:0:7}" \
-      #        --output text)
+      - run:
+          name: Ensure back-end infrastructure exists
+          command: |
+            aws cloudformation deploy \
+              --template-file .circleci/files/backend.yml \
+              --tags project=AB_UDACITY_PROJECT3_BACKEND \
+              --stack-name "backend-udapeople-${CIRCLE_WORKFLOW_ID:0:7}" \
+              --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"
+      - run:
+          name: Save backend URL in memstash
+          command: |
+            BACKEND_IP=$(aws ec2 describe-instances \
+              --query 'Reservations[*].Instances[*].PublicIpAddress' \
+              --filters "Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID:0:7}" \
+              --output text)
 
-      #      curl -H "Content-Type: text/plain" -H "token: b95f8dc3-9ee8-4285-b889-af9c1b5e8329" --request PUT --data "http://$BACKEND_IP:3030" https://api.memstash.io/values/BACKEND_URL
+            curl -H "Content-Type: text/plain" -H "token: b95f8dc3-9ee8-4285-b889-af9c1b5e8329" --request PUT --data "http://$BACKEND_IP:3030" https://api.memstash.io/values/BACKEND_URL
 
-      #- run:
-      #    name: Ensure front-end infrastructure exist
-      #    command: |
-      #      aws cloudformation deploy \
-      #        --template-file .circleci/files/frontend.yml \
-      #        --tags project=AB_UDACITY_PROJECT3_FRONTEND \
-      #        --stack-name "frontend-udapeople-${CIRCLE_WORKFLOW_ID:0:7}" \
-      #        --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"
+      - run:
+          name: Ensure front-end infrastructure exist
+          command: |
+            aws cloudformation deploy \
+              --template-file .circleci/files/frontend.yml \
+              --tags project=AB_UDACITY_PROJECT3_FRONTEND \
+              --stack-name "frontend-udapeople-${CIRCLE_WORKFLOW_ID:0:7}" \
+              --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"
       - run:
           name: Add back-end ip to ansible inventory
           command: |
             aws ec2 describe-instances \
               --query 'Reservations[*].Instances[*].PublicIpAddress' \
-              --filters "Name=tag:Name,Values=backend-2df6a7b" \
+              --filters "Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID:0:7}" \
               --output text >> .circleci/ansible/inventory.txt
             cat .circleci/ansible/inventory.txt
       - persist_to_workspace:
@@ -457,32 +457,30 @@ workflows:
           requires:
             - install-backend-dependencies
           context: ABProject3
-      #- test-frontend:
-      #    requires: [build-frontend]
-      #- test-backend:
-      #    requires: [build-backend]
-      #- scan-backend:
-      #    requires: [build-backend]
-      #- scan-frontend:
-      #    requires: [build-frontend]
+      - test-frontend:
+          requires: [build-frontend]
+      - test-backend:
+          requires: [build-backend]
+      - scan-backend:
+          requires: [build-backend]
+      - scan-frontend:
+          requires: [build-frontend]
       - deploy-infrastructure:
-      #    requires: [test-frontend, test-backend, scan-frontend, scan-backend]
-          requires: [build-frontend, build-backend]
+          requires: [test-frontend, test-backend, scan-frontend, scan-backend]
           filters:
             branches:
               only: main
-      #- configure-infrastructure:
-      #    requires: [deploy-infrastructure]
-      #- run-migrations:
-      #    requires: [configure-infrastructure]
-      #- deploy-frontend:
-      #    requires: [run-migrations]
-      - deploy-backend:
-      #    requires: [run-migrations]
+      - configure-infrastructure:
           requires: [deploy-infrastructure]
-      #- smoke-test:
-      #    requires: [deploy-backend, deploy-frontend]
-      #- cloudfront-update:
-      #    requires: [smoke-test]
-      #- cleanup:
-      #    requires: [cloudfront-update]
+      - run-migrations:
+          requires: [configure-infrastructure]
+      - deploy-frontend:
+          requires: [run-migrations]
+      - deploy-backend:
+          requires: [run-migrations]
+      - smoke-test:
+          requires: [deploy-backend, deploy-frontend]
+      - cloudfront-update:
+          requires: [smoke-test]
+      - cleanup:
+          requires: [cloudfront-update]
