@@ -245,7 +245,10 @@ jobs:
             echo TYPEORM_DATABASE=$TYPEORM_DATABASE >> "backend/.env"
             echo NODE_ENV=production >> "backend/.env"
 
-            cat ~/project/bacakend/.env
+            ls -ltr ~/project
+            ls -ltr ~/project/backend
+            pwd
+            cat bacakend/.env
             echo "$TYPEORM_HOST"
             echo "$TYPEORM_PORT"
             echo "$TYPEORM_USERNAME"
