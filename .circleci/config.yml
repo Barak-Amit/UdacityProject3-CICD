@@ -227,6 +227,8 @@ jobs:
             curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
             unzip awscliv2.zip
             sudo ./aws/install
+            npm install typescript
+
       - run:
           name: add values to backend/.env files
           no_output_timeout: 30m
